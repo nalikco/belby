@@ -1,6 +1,7 @@
 import typing
 
 from entities.product import Product
+from shops.fotomix import Fotomix
 from shops.mobilworld import MobilWorld
 from shops.onliner import Onliner
 from shops.redstore import RedStore
@@ -9,7 +10,7 @@ from shops.shopby import ShopBy
 
 def run_search(query: str, callback) -> typing.List[Product]:
     products = []
-    shops_count = 4
+    shops_count = 5
 
     callback(1, shops_count)
     red_store = RedStore()
@@ -26,6 +27,10 @@ def run_search(query: str, callback) -> typing.List[Product]:
     callback(4, shops_count)
     mobil_world = MobilWorld()
     products += mobil_world.find(query)[:1]
+
+    callback(5, shops_count)
+    foto_mix = Fotomix()
+    products += foto_mix.find(query)[:1]
 
     products.sort(key=lambda p: p.price)
 

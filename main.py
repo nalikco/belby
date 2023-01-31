@@ -1,6 +1,13 @@
+import os
+
+from dotenv import load_dotenv
 from vk import Vk
 
-vk = Vk("vk1.a.3oBv1rvOtNfXiLw90nsLjvCCwq3TmBVz46PA-WdEqNZnHYZIzP6GZGY8BORFv3KziYAQOUfWBRXvauaFUlMjn"
-        "-Ha6mzJ4Q6daH7wHXez1lefTuGH38GDsXirJaSttuM2I5VTTVc54rwZLwW8z_hbp1FaFdMgVBnqvIp-Fnf3_FQXCmEXzk1hxVqIytcTxkTt")
+load_dotenv()
 
-vk.polling("211151815")
+# FOR TEST
+# run_search("macbook", lambda shop, shops: print(shop))
+
+vk = Vk(os.getenv("VK_TOKEN"))
+
+vk.polling(os.getenv("VK_GROUP_ID"))
