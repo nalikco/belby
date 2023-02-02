@@ -65,10 +65,9 @@ class Vk:
                 message = "\n\nЛучшие результаты:\n\n\n"
                 i = 1
                 for product in products:
-                    message += "%d: %s... (%s), %0.2f BYN: %s\n\n" % (
+                    message += "%d: %s..., %0.2f BYN: %s\n\n" % (
                         i,
-                        product.title[:20],
-                        product.shop,
+                        product.title[:30],
                         product.price,
                         product.link
                     )
