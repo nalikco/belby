@@ -40,6 +40,8 @@ class MobilWorld(Shop):
         url = 'https://mobilworld.by/catalog/'
         data = {
             'q': query,
+            'sort': "PRICE",
+            'order': "asc",
             's': 'Найти'
         }
         response = requests.get("%s?%s" % (url, urlencode(data)), headers={

@@ -54,6 +54,7 @@ class ShopBy(Shop):
     def send_request(query):
         url = 'https://shop.by/find/'
         data = {
+            'sort': 'price--number',
             'findtext': query,
         }
         query_params = urlencode(data)
