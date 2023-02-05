@@ -3,8 +3,8 @@ from urllib.parse import urlencode
 
 import requests
 
+from entities import Message, User
 from shops import run_search
-from database import db
 
 
 class Vk:
@@ -46,8 +46,8 @@ class Vk:
                 if len(response_json["updates"]) == 0:
                     continue
 
-                user = db.get_or_create_user_by_vk_id(int(response_json["updates"][0]["object"]["message"]["from_id"]))
-                message = db.create_message(user.id, response_json["updates"][0]["object"]["message"]["text"])
+                user = User.get_or_create_by_vk_id(int(response_json["updates"][0]["object"]["message"]["from_id"]))
+                message = Message.create(user.id, response_json["updates"][0]["object"]["message"]["text"])
                 print(message.created_at)
 
                 send_message_response = self.method("messages.send", {
@@ -59,31 +59,31 @@ class Vk:
                     continue
 
                 message_id = send_message_response.json()["response"]
-                # products = run_search(response_json["updates"][0]["object"]["message"]["text"],
-                #                       lambda shop, shops: self.method("messages.edit", {
-                #                           "peer_id": response_json["updates"][0]["object"]["message"]["from_id"],
-                #                           "random_id": random.randint(10000000000, 99999999999),
-                #                           "message": "Получение данных из магазинов (%d/%d)" % (shop, shops),
-                #                           "message_id": message_id
-                #                       }))
-                #
-                # message = "\n\nЛучшие результаты:\n\n\n"
-                # i = 1
-                # for product in products:
-                #     message += "%d: %s..., %0.2f BYN: %s\n\n" % (
-                #         i,
-                #         product.title[:30],
-                #         product.price,
-                #         product.link
-                #     )
-                #
-                #     i += 1
-                #
-                # self.method("messages.edit", {
-                #     "peer_id": response_json["updates"][0]["object"]["message"]["from_id"],
-                #     "random_id": random.randint(10000000000, 99999999999),
-                #     "message": message,
-                #     "message_id": message_id
-                # })
+                products = run_search(response_json["updates"][0]["object"]["message"]["text"],
+                                      lambda shop, shops: self.method("messages.edit", {
+                                          "peer_id": response_json["updates"][0]["object"]["message"]["from_id"],
+                                          "random_id": random.randint(10000000000, 99999999999),
+                                          "message": "Получение данных из магазинов (%d/%d)" % (shop, shops),
+                                          "message_id": message_id
+                                      }))
+
+                message = "\n\nЛучшие результаты:\n\n\n"
+                i = 1
+                for product in products:
+                    message += "%d: %s..., %0.2f BYN: %s\n\n" % (
+                        i,
+                        product.title[:30],
+                        product.price,
+                        product.link
+                    )
+
+                    i += 1
+
+                self.method("messages.edit", {
+                    "peer_id": response_json["updates"][0]["object"]["message"]["from_id"],
+                    "random_id": random.randint(10000000000, 99999999999),
+                    "message": message,
+                    "message_id": message_id
+                })
         except KeyError:
             print("connection error")
