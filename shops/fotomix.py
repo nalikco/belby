@@ -20,19 +20,15 @@ class Fotomix(Shop):
         products_html = soup.find_all("div", attrs={"class": "product-layout"})
 
         for product_html in products_html:
-            try:
-                link = product_html.find_next("a")
-                price_text = product_html.find_next("div", attrs={"class": "price"}).find_next("span").text
+            link = product_html.find_next("a")
+            price_text = product_html.find_next("div", attrs={"class": "price"}).find_next("span").text
 
-                product = Product(self.title)
-                product.title = link.find_next("img").attrs.get("title")
-                product.price = float(price_text.replace(" р.", "").replace(" ", ""))
-                product.link = link.attrs.get("href")
+            product = Product(self.title)
+            product.title = link.find_next("img").attrs.get("title")
+            product.price = float(price_text.replace(" р.", "").replace(" ", ""))
+            product.link = link.attrs.get("href")
 
-                products.append(product)
-
-            except ValueError:
-                pass
+            products.append(product)
 
         return products
 

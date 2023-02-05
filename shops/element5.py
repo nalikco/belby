@@ -3,7 +3,6 @@ from urllib.parse import urlencode
 
 import requests
 import collections
-from bs4 import BeautifulSoup
 
 from entities import Product
 from shops.shop import Shop
@@ -26,8 +25,7 @@ class Element5(Shop):
                 product.price = float(product_json["price"])
 
                 products.append(product)
-
-        except ValueError:
+        except KeyError:
             pass
 
         return products
