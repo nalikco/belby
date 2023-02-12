@@ -74,7 +74,10 @@ func (p *Polling) Run() error {
 
 		ts = response.Ts
 
-		fmt.Println(ts)
-		fmt.Println(response)
+		for _, update := range response.Updates {
+			if update.Type == "message_new" {
+				fmt.Println(update.Object["message"])
+			}
+		}
 	}
 }

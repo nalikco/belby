@@ -11,6 +11,14 @@ type getServerResponseBody struct {
 }
 
 type longPollResponse struct {
-	Ts      int64  `json:"ts"`
-	Updates string `json:"updates"`
+	Ts      int64             `json:"ts"`
+	Updates []longPollUpdates `json:"updates"`
+}
+
+type longPollUpdates struct {
+	GroupId int64                  `json:"group_id"`
+	Type    string                 `json:"type"`
+	EventId string                 `json:"event_id"`
+	V       string                 `json:"v"`
+	Object  map[string]interface{} `json:"object"`
 }

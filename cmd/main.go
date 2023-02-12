@@ -2,17 +2,24 @@ package main
 
 import (
 	"belby/pkg/vk"
-	"fmt"
+	"github.com/joho/godotenv"
+	"log"
+	"os"
 )
 
 func main() {
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
+
 	vkApi := vk.NewVk(
-		"211151815",
-		"vk1.a.3oBv1rvOtNfXiLw90nsLjvCCwq3TmBVz46PA-WdEqNZnHYZIzP6GZGY8BORFv3KziYAQOUfWBRXvauaFUlMjn-Ha6mzJ4Q6daH7wHXez1lefTuGH38GDsXirJaSttuM2I5VTTVc54rwZLwW8z_hbp1FaFdMgVBnqvIp-Fnf3_FQXCmEXzk1hxVqIytcTxkTt",
+		os.Getenv("VK_GROUP_ID"),
+		os.Getenv("VK_TOKEN"),
 	)
 
-	err := vkApi.Polling()
+	err = vkApi.Polling()
 	if err != nil {
-		fmt.Println(err)
+		log.Fatal(err)
 	}
 }
