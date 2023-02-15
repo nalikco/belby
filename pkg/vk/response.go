@@ -18,7 +18,7 @@ type longPollResponse struct {
 type longPollUpdates struct {
 	GroupId int64                  `json:"group_id"`
 	Type    string                 `json:"type"`
-	EventId string                 `json:"event_id"`
+	EventID string                 `json:"event_id"`
 	V       string                 `json:"v"`
 	Object  map[string]interface{} `json:"object"`
 }

@@ -18,7 +18,7 @@ type Polling struct {
 func NewPolling(vk *Vk) *Polling {
 	return &Polling{
 		vk:      vk,
-		timeOut: 25,
+		timeOut: 5,
 		ts:      0,
 	}
 }
@@ -76,7 +76,7 @@ func (p *Polling) Run() error {
 
 		for _, update := range response.Updates {
 			if update.Type == "message_new" {
-				fmt.Println(update.Object["message"])
+				//
 			}
 		}
 	}
