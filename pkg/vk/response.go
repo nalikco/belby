@@ -11,11 +11,11 @@ type getServerResponseBody struct {
 }
 
 type longPollResponse struct {
-	Ts      int64             `json:"ts"`
-	Updates []longPollUpdates `json:"updates"`
+	Ts      int64            `json:"ts"`
+	Updates []longPollUpdate `json:"updates"`
 }
 
-type longPollUpdates struct {
+type longPollUpdate struct {
 	GroupId int64                  `json:"group_id"`
 	Type    string                 `json:"type"`
 	EventID string                 `json:"event_id"`

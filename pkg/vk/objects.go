@@ -1,6 +1,6 @@
 package vk
 
-type MessageObject struct {
+type Message struct {
 	Date                  int64                  `json:"date"`
 	FromID                int64                  `json:"from_id"`
 	ID                    int64                  `json:"id"`

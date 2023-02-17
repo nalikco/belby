@@ -48,10 +48,11 @@ func (p *ShopsParser) sort(products []entities.Product) []entities.Product {
 	return sortedProducts
 }
 
-func (p *ShopsParser) Find(query string) ([]entities.Product, error) {
+func (p *ShopsParser) Find(query string, callback func(elem, count int)) ([]entities.Product, error) {
 	var products []entities.Product
 
-	for _, shop := range p.ShopsList {
+	for i, shop := range p.ShopsList {
+		callback(i+1, len(p.ShopsList))
 		productsFromShop, err := shop.Find(query)
 		if err != nil {
 			return products, nil
@@ -60,5 +61,11 @@ func (p *ShopsParser) Find(query string) ([]entities.Product, error) {
 		products = append(products, productsFromShop)
 	}
 
-	return p.sort(products), nil
+	sortedProducts := p.sort(products)
+
+	if len(sortedProducts) > 5 {
+		return sortedProducts[:5], nil
+	} else {
+		return sortedProducts, nil
+	}
 }
