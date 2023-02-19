@@ -1,7 +1,7 @@
 package main
 
 import (
-	"belby/pkg/vk"
+	"belby/internal/cli"
 	"github.com/joho/godotenv"
 	"log"
 	"os"
@@ -13,13 +13,7 @@ func main() {
 		log.Fatal("Error loading .env file")
 	}
 
-	vkApi := vk.NewVk(
-		os.Getenv("VK_GROUP_ID"),
-		os.Getenv("VK_TOKEN"),
-	)
-
-	err = vkApi.Polling()
-	if err != nil {
+	if err := cli.Handle(os.Args); err != nil {
 		log.Fatal(err)
 	}
 }
