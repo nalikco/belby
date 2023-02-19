@@ -27,7 +27,7 @@ func NewVk(groupId, accessToken string) *Vk {
 	return vk
 }
 
-func (v *Vk) method(method string, query map[string]string) ([]byte, error) {
+func (v *Vk) Method(method string, query map[string]string) ([]byte, error) {
 	query["v"] = v.v
 	query["access_token"] = v.accessToken
 
@@ -43,6 +43,6 @@ func (v *Vk) method(method string, query map[string]string) ([]byte, error) {
 	return body, err
 }
 
-func (v *Vk) Polling() error {
-	return v.polling.Run()
+func (v *Vk) Polling(callback func(updates []Update, vk *Vk)) error {
+	return v.polling.Run(callback)
 }
