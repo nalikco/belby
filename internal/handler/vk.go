@@ -8,7 +8,7 @@ import (
 	"math/rand"
 )
 
-func HandleVk(message *vk.Message, vk *vk.Vk) error {
+func HandleVk(message vk.Message, vk *vk.Vk) error {
 	response, err := vk.Method("messages.send", map[string]string{
 		"peer_id":   fmt.Sprintf("%d", message.PeerID),
 		"random_id": fmt.Sprintf("%d", rand.Uint32()),

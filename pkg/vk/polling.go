@@ -62,7 +62,7 @@ func (p *Polling) requestToServer(server getServerResponse, ts int64) (longPollR
 	return responseBody, err
 }
 
-func (p *Polling) Run(callback func(updates []Update, vk *Vk)) error {
+func (p *Polling) Run(callback func(updates []interface{}, vk *Vk)) error {
 	serverResponse, err := p.getServer()
 	if err != nil {
 		return err
@@ -75,7 +75,7 @@ func (p *Polling) Run(callback func(updates []Update, vk *Vk)) error {
 
 		ts = response.Ts
 
-		var updates []Update
+		var updates []interface{}
 
 		for _, update := range response.Updates {
 			if update.Type == "message_new" {
@@ -85,10 +85,7 @@ func (p *Polling) Run(callback func(updates []Update, vk *Vk)) error {
 					continue
 				}
 
-				updates = append(updates, Update{
-					Type:   "message_new",
-					Object: &message,
-				})
+				updates = append(updates, message)
 			}
 		}
 

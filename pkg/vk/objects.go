@@ -1,10 +1,5 @@
 package vk
 
-type Update struct {
-	Type   string
-	Object interface{}
-}
-
 type Message struct {
 	Date                  int64                  `json:"date"`
 	FromID                int64                  `json:"from_id"`

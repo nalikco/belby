@@ -43,6 +43,6 @@ func (v *Vk) Method(method string, query map[string]string) ([]byte, error) {
 	return body, err
 }
 
-func (v *Vk) Polling(callback func(updates []Update, vk *Vk)) error {
+func (v *Vk) Polling(callback func(updates []interface{}, vk *Vk)) error {
 	return v.polling.Run(callback)
 }
