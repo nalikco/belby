@@ -1,7 +1,6 @@
 package shops
 
 import (
-	"belby/internal/entities"
 	"belby/pkg/request"
 	"golang.org/x/net/html"
 	"io"
@@ -25,32 +24,32 @@ func (s *Vek21) GetTitle() string {
 	return s.title
 }
 
-func (s *Vek21) Find(query string) (entities.Product, error) {
-	var products []entities.Product
+func (s *Vek21) Find(query string) (Product, error) {
+	var products []Product
 
 	response, err := s.makeRequest(query)
 	if err != nil {
-		return entities.Product{}, err
+		return Product{}, err
 	}
 
 	products, err = s.parse(response)
 	if err != nil {
-		return entities.Product{}, nil
+		return Product{}, nil
 	}
 
 	sortedProducts, err := s.sort(products)
 	if err != nil {
-		return entities.Product{}, nil
+		return Product{}, nil
 	}
 
 	if len(sortedProducts) > 0 {
 		return sortedProducts[0], nil
 	} else {
-		return entities.Product{}, nil
+		return Product{}, nil
 	}
 }
 
-func (s *Vek21) sort(products []entities.Product) ([]entities.Product, error) {
+func (s *Vek21) sort(products []Product) ([]Product, error) {
 	sortedProducts := products
 
 	sort.Slice(sortedProducts[:], func(i, j int) bool {
@@ -60,8 +59,8 @@ func (s *Vek21) sort(products []entities.Product) ([]entities.Product, error) {
 	return sortedProducts, nil
 }
 
-func (s *Vek21) parse(response string) ([]entities.Product, error) {
-	var products []entities.Product
+func (s *Vek21) parse(response string) ([]Product, error) {
+	var products []Product
 
 	tokenizer := html.NewTokenizer(strings.NewReader(response))
 
@@ -69,7 +68,7 @@ func (s *Vek21) parse(response string) ([]entities.Product, error) {
 	divsCountBeforeClose := 0
 	titleFound := false
 
-	product := entities.Product{
+	product := Product{
 		ShopTitle: s.GetTitle(),
 	}
 	for {
@@ -138,7 +137,7 @@ func (s *Vek21) parse(response string) ([]entities.Product, error) {
 						products = append(products, product)
 					}
 
-					product = entities.Product{
+					product = Product{
 						ShopTitle: s.GetTitle(),
 					}
 				}

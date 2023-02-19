@@ -1,7 +1,6 @@
 package shops
 
 import (
-	"belby/internal/entities"
 	"belby/pkg/request"
 	"fmt"
 	"golang.org/x/net/html"
@@ -27,32 +26,32 @@ func (s *ElectroSila) GetTitle() string {
 	return s.title
 }
 
-func (s *ElectroSila) Find(query string) (entities.Product, error) {
-	var products []entities.Product
+func (s *ElectroSila) Find(query string) (Product, error) {
+	var products []Product
 
 	response, err := s.makeRequest(query)
 	if err != nil {
-		return entities.Product{}, err
+		return Product{}, err
 	}
 
 	products, err = s.parse(response)
 	if err != nil {
-		return entities.Product{}, nil
+		return Product{}, nil
 	}
 
 	sortedProducts, err := s.sort(products)
 	if err != nil {
-		return entities.Product{}, nil
+		return Product{}, nil
 	}
 
 	if len(sortedProducts) > 0 {
 		return sortedProducts[0], nil
 	} else {
-		return entities.Product{}, nil
+		return Product{}, nil
 	}
 }
 
-func (s *ElectroSila) sort(products []entities.Product) ([]entities.Product, error) {
+func (s *ElectroSila) sort(products []Product) ([]Product, error) {
 	sortedProducts := products
 
 	sort.Slice(sortedProducts[:], func(i, j int) bool {
@@ -62,8 +61,8 @@ func (s *ElectroSila) sort(products []entities.Product) ([]entities.Product, err
 	return sortedProducts, nil
 }
 
-func (s *ElectroSila) parse(response string) ([]entities.Product, error) {
-	var products []entities.Product
+func (s *ElectroSila) parse(response string) ([]Product, error) {
+	var products []Product
 
 	tokenizer := html.NewTokenizer(strings.NewReader(response))
 
@@ -73,7 +72,7 @@ func (s *ElectroSila) parse(response string) ([]entities.Product, error) {
 	priceFound := false
 	priceDecimalFound := 0
 
-	product := entities.Product{
+	product := Product{
 		ShopTitle: s.GetTitle(),
 	}
 	for {
@@ -102,7 +101,7 @@ func (s *ElectroSila) parse(response string) ([]entities.Product, error) {
 					priceDecimalFound = 0
 
 					products = append(products, product)
-					product = entities.Product{
+					product = Product{
 						ShopTitle: s.GetTitle(),
 					}
 				}

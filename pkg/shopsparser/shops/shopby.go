@@ -1,7 +1,6 @@
 package shops
 
 import (
-	"belby/internal/entities"
 	"belby/pkg/request"
 	"golang.org/x/net/html"
 	"io"
@@ -25,32 +24,32 @@ func (s *ShopBy) GetTitle() string {
 	return s.title
 }
 
-func (s *ShopBy) Find(query string) (entities.Product, error) {
-	var products []entities.Product
+func (s *ShopBy) Find(query string) (Product, error) {
+	var products []Product
 
 	response, err := s.makeRequest(query)
 	if err != nil {
-		return entities.Product{}, err
+		return Product{}, err
 	}
 
 	products, err = s.parse(response)
 	if err != nil {
-		return entities.Product{}, nil
+		return Product{}, nil
 	}
 
 	sortedProducts, err := s.sort(products)
 	if err != nil {
-		return entities.Product{}, nil
+		return Product{}, nil
 	}
 
 	if len(sortedProducts) > 0 {
 		return sortedProducts[0], nil
 	} else {
-		return entities.Product{}, nil
+		return Product{}, nil
 	}
 }
 
-func (s *ShopBy) sort(products []entities.Product) ([]entities.Product, error) {
+func (s *ShopBy) sort(products []Product) ([]Product, error) {
 	sortedProducts := products
 
 	sort.Slice(sortedProducts[:], func(i, j int) bool {
@@ -60,8 +59,8 @@ func (s *ShopBy) sort(products []entities.Product) ([]entities.Product, error) {
 	return sortedProducts, nil
 }
 
-func (s *ShopBy) parse(response string) ([]entities.Product, error) {
-	var products []entities.Product
+func (s *ShopBy) parse(response string) ([]Product, error) {
+	var products []Product
 
 	tokenizer := html.NewTokenizer(strings.NewReader(response))
 
@@ -71,7 +70,7 @@ func (s *ShopBy) parse(response string) ([]entities.Product, error) {
 	priceFound := false
 	priceSecondFound := false
 
-	product := entities.Product{
+	product := Product{
 		ShopTitle: s.GetTitle(),
 	}
 	for {
@@ -97,7 +96,7 @@ func (s *ShopBy) parse(response string) ([]entities.Product, error) {
 
 					product.Price = price
 					products = append(products, product)
-					product = entities.Product{
+					product = Product{
 						ShopTitle: s.GetTitle(),
 					}
 				}
@@ -116,7 +115,7 @@ func (s *ShopBy) parse(response string) ([]entities.Product, error) {
 
 					product.Price = price
 					products = append(products, product)
-					product = entities.Product{
+					product = Product{
 						ShopTitle: s.GetTitle(),
 					}
 				}

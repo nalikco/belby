@@ -1,7 +1,6 @@
 package shopsparser
 
 import (
-	"belby/internal/entities"
 	"belby/pkg/shopsparser/shops"
 	"sort"
 )
@@ -32,8 +31,8 @@ func (p *ShopsParser) initializeShops() {
 	p.ShopsList = list
 }
 
-func (p *ShopsParser) sort(products []entities.Product) []entities.Product {
-	var sortedProducts []entities.Product
+func (p *ShopsParser) sort(products []shops.Product) []shops.Product {
+	var sortedProducts []shops.Product
 
 	for _, product := range products {
 		if product.Title != "" && product.Link != "" && product.Price != 0 {
@@ -48,8 +47,8 @@ func (p *ShopsParser) sort(products []entities.Product) []entities.Product {
 	return sortedProducts
 }
 
-func (p *ShopsParser) Find(query string, callback func(elem, count int)) ([]entities.Product, error) {
-	var products []entities.Product
+func (p *ShopsParser) Find(query string, callback func(elem, count int)) ([]shops.Product, error) {
+	var products []shops.Product
 
 	for i, shop := range p.ShopsList {
 		callback(i+1, len(p.ShopsList))

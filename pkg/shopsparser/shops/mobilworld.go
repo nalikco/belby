@@ -1,7 +1,6 @@
 package shops
 
 import (
-	"belby/internal/entities"
 	"belby/pkg/request"
 	"golang.org/x/net/html"
 	"io"
@@ -25,32 +24,32 @@ func (s *MobilWorld) GetTitle() string {
 	return s.title
 }
 
-func (s *MobilWorld) Find(query string) (entities.Product, error) {
-	var products []entities.Product
+func (s *MobilWorld) Find(query string) (Product, error) {
+	var products []Product
 
 	response, err := s.makeRequest(query)
 	if err != nil {
-		return entities.Product{}, err
+		return Product{}, err
 	}
 
 	products, err = s.parse(query, response)
 	if err != nil {
-		return entities.Product{}, nil
+		return Product{}, nil
 	}
 
 	sortedProducts, err := s.sort(products)
 	if err != nil {
-		return entities.Product{}, nil
+		return Product{}, nil
 	}
 
 	if len(sortedProducts) > 0 {
 		return sortedProducts[0], nil
 	} else {
-		return entities.Product{}, nil
+		return Product{}, nil
 	}
 }
 
-func (s *MobilWorld) sort(products []entities.Product) ([]entities.Product, error) {
+func (s *MobilWorld) sort(products []Product) ([]Product, error) {
 	sortedProducts := products
 
 	sort.Slice(sortedProducts[:], func(i, j int) bool {
@@ -60,8 +59,8 @@ func (s *MobilWorld) sort(products []entities.Product) ([]entities.Product, erro
 	return sortedProducts, nil
 }
 
-func (s *MobilWorld) parse(query, response string) ([]entities.Product, error) {
-	var products []entities.Product
+func (s *MobilWorld) parse(query, response string) ([]Product, error) {
+	var products []Product
 
 	tokenizer := html.NewTokenizer(strings.NewReader(response))
 
@@ -69,7 +68,7 @@ func (s *MobilWorld) parse(query, response string) ([]entities.Product, error) {
 	divsCountBeforeClose := 0
 	priceFound := false
 
-	product := entities.Product{
+	product := Product{
 		ShopTitle: s.GetTitle(),
 	}
 	for {
@@ -94,7 +93,7 @@ func (s *MobilWorld) parse(query, response string) ([]entities.Product, error) {
 					if strings.Contains(product.Title, query) {
 						products = append(products, product)
 					}
-					product = entities.Product{
+					product = Product{
 						ShopTitle: s.GetTitle(),
 					}
 				}

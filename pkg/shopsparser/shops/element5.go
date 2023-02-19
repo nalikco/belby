@@ -1,7 +1,6 @@
 package shops
 
 import (
-	"belby/internal/entities"
 	"belby/pkg/request"
 	"encoding/json"
 	"io"
@@ -38,32 +37,32 @@ func (s *Element5) GetTitle() string {
 	return s.title
 }
 
-func (s *Element5) Find(query string) (entities.Product, error) {
-	var products []entities.Product
+func (s *Element5) Find(query string) (Product, error) {
+	var products []Product
 
 	response, err := s.makeRequest(query)
 	if err != nil {
-		return entities.Product{}, err
+		return Product{}, err
 	}
 
 	products, err = s.parse(response)
 	if err != nil {
-		return entities.Product{}, nil
+		return Product{}, nil
 	}
 
 	sortedProducts, err := s.sort(products)
 	if err != nil {
-		return entities.Product{}, nil
+		return Product{}, nil
 	}
 
 	if len(sortedProducts) > 0 {
 		return sortedProducts[0], nil
 	} else {
-		return entities.Product{}, nil
+		return Product{}, nil
 	}
 }
 
-func (s *Element5) sort(products []entities.Product) ([]entities.Product, error) {
+func (s *Element5) sort(products []Product) ([]Product, error) {
 	sortedProducts := products
 
 	sort.Slice(sortedProducts[:], func(i, j int) bool {
@@ -73,8 +72,8 @@ func (s *Element5) sort(products []entities.Product) ([]entities.Product, error)
 	return sortedProducts, nil
 }
 
-func (s *Element5) parse(response string) ([]entities.Product, error) {
-	var products []entities.Product
+func (s *Element5) parse(response string) ([]Product, error) {
+	var products []Product
 
 	var responseBody element5ResponseBody
 	err := json.Unmarshal([]byte(response), &responseBody)
@@ -88,7 +87,7 @@ func (s *Element5) parse(response string) ([]entities.Product, error) {
 			continue
 		}
 
-		product := entities.Product{
+		product := Product{
 			ShopTitle: s.GetTitle(),
 			Title:     item.Name,
 			Price:     price,
